@@ -1,6 +1,6 @@
 library(data.table)
 
-# funkcje do oceny seozonowej, bukmacherskiej i przedmeczowej
+# funkcje do oceny sezonowej, bukmacherskiej i przedmeczowej
 
 Season_Table <- function(season, data = dt){
   dt_long <- melt(data,
