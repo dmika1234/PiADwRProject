@@ -131,6 +131,30 @@ Prediction <- function(home_team, away_team, data = dt){
   return(list("Probability" = summarized_results, "Expected goals" = predicted_result))
 }
 
+##mecze druzyny w sezonie##
+season_matches <- function(season, team, data = dt){
+  
+  sample_dts <- dt[Season == season & (HomeTeam == team | AwayTeam == team)]
+  
+  return(sample_dts)
+}
+##
+
+
+##Daty meczy druzyny w sezonie##
+match_dates <- function(season, team, data = dt){
+  
+  sample_dts <- season_matches(season, team, data)
+  match_dates <- sort(sample_dts[, Date])
+  
+  return(match_dates)
+  
+}
+##
+
+
+
+
 #### funkcje ktore ostatecznie raczej sie nie przydadza ####
 
 # funkcja obliczjaca procent wygranych w domu/ na wyjezdzie
