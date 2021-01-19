@@ -260,7 +260,7 @@ teams_result_barplot <- function(team_1, team_2, num_of_games = 4){
 #przykładowe wywołanie: teams_result_barplot("Chelsea", "Man United", 10)
 #==================================================================================================================
 
-
+asd
 
 
 
