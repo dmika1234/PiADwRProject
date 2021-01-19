@@ -7,7 +7,7 @@ library(data.table)
 
 
 
-#Funckja przedstawia punkty drużyn pod koniec sezonu==================================================================
+#Funckja przedstawia punkty drużyn pod koniec sezonu===============================================================
 season_pts_viz <- function(season){
   
   
@@ -37,13 +37,9 @@ season_pts_viz <- function(season){
   
 }
 #przykładowe wywołanie: season_pts_viz("2017/2018", Season_Table(s)[, Pts])
-#=====================================================================================================================
+#=======================================================================================================================
 
-
-
-
-
-#Forma druzyny w sezonie-wykres=====================================================================================================================
+#Forma druzyny w sezonie-wykres=========================================================================================
 plot_season_team_form <- function(season, team, data = dt){
   
   sample_dts <- season_matches(season, team, data)
@@ -92,7 +88,7 @@ plot_season_team_form <- function(season, team, data = dt){
     geom_point(aes(x = 1:matches_count, y = points_fraction, color = points_fraction)) +
     geom_line(aes(x = 1:matches_count, y = points_fraction, color = points_fraction)) +
     theme_bw() +
-    labs(title = "Forma drużyny podczas sezonu", x = "Rozegrane mecze", y = "Forma") +
+    labs(title = paste(team, "form during season", season), x = "Matches played", y = "Form") +
     theme(plot.title = element_text(hjust = 0.5), 
           legend.position = "none")
   
@@ -107,20 +103,11 @@ plot_season_team_form <- function(season, team, data = dt){
 
 
 
-
-#=================================================OCENA PRZEDMECZOWA=======================================================================================
-
+#=================================================OCENA PRZEDMECZOWA====================================================
 
 
 
-
-
-
-
-
-
-
-#Forma druzyny w do daty-wykres=====================================================================================================================
+#Forma druzyny w do daty-wykres==========================================================================================
 plot_todate_team_form <- function(season, team, data = dt, date){
   
   sample_dts <- season_matches(season, team, data)
@@ -170,16 +157,20 @@ plot_todate_team_form <- function(season, team, data = dt, date){
     geom_point(aes(x = 1:matches_count, y = points_fraction, color = points_fraction)) +
     geom_line(aes(x = 1:matches_count, y = points_fraction, color = points_fraction)) +
     theme_bw() +
-    labs(title = "Forma drużyny podczas sezonu", x = "Rozegrane mecze", y = "Forma") +
+    labs(title =  paste(team, "form during season", "to ", date), x = "Matches played", y = "Form") +
     theme(plot.title = element_text(hjust = 0.5), 
           legend.position = "none")
   
 }
 #Przykladowe uzycie: plot_todate_team_form(s, "Chelsea", dt, "2011-11-11")
-#=====================================================================================================================
+#====================================================================================================================
 
 
-#Funckja przedstawia punkty drużyn do konkretnej daty==================================================================
+
+
+
+
+#Funckja przedstawia punkty drużyn do konkretnej daty================================================================
 todate_pts_viz <- function(season, date){
   
   
@@ -208,12 +199,12 @@ todate_pts_viz <- function(season, date){
 }
 
 #przykładowe wywołanie: todate_pts_viz("2017/2018", "2018-01-01")
-#=====================================================================================================================
+#===================================================================================================================
 
 
 
 
-#Bar plot ostatnich wyników meczy=========================================================================================================================================================
+#Bar plot ostatnich wyników meczy====================================================================================
 result_barplot <- function(team, num_of_games){
   
 
@@ -241,7 +232,38 @@ result_barplot <- function(team, num_of_games){
 
 result_barplot("Liverpool", 10)
 #przykładowe wywołanie: result_barplot("Liverpool", 10)
-#=====================================================================================================================
+#==================================================================================================================
+
+
+
+
+
+
+#=======================================================INNE=======================================================
+
+
+
+#barplot wyników ostatnich meczy między dwoma drużynami============================================================
+teams_result_barplot <- function(team_1, team_2, num_of_games = 4){
+  
+  results <- head(Last_Games_Results(team_1, team_2), num_of_games)
+  
+  ggplot(results) +
+    geom_bar(aes(x = Winner, fill = Winner)) +
+    theme_bw() +
+    theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
+    labs(title = paste("Results count in last ", num_of_games, "games"), x = "Result", y = "Count")
+  
+}
+
+
+#przykładowe wywołanie: teams_result_barplot("Chelsea", "Man United", 10)
+#==================================================================================================================
+
+
+
+
+
 
 
 
