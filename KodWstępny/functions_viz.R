@@ -1,13 +1,23 @@
 library(ggplot2)
 library(data.table)
 
+
+
 #================================================OCENA SEZONOWA====================================================
+
+
 
 #Funckja przedstawia punkty drużyn pod koniec sezonu==================================================================
 season_pts_viz <- function(season){
   
   
   sample_dt <- Season_Table(season)
+  
+  order_vector <- order(sample_dt[, Pts], decreasing = TRUE)
+  
+  sample_dt <- sample_dt[order_vector]
+  
+  
   
   level_order <- sample_dt[, Team]
   
@@ -26,9 +36,10 @@ season_pts_viz <- function(season){
           legend.position = "none")
   
 }
-
-#przykładowe wywołanie: season_pts_viz("2017/2018")
+#przykładowe wywołanie: season_pts_viz("2017/2018", Season_Table(s)[, Pts])
 #=====================================================================================================================
+
+
 
 
 
@@ -90,7 +101,22 @@ plot_season_team_form <- function(season, team, data = dt){
 #=====================================================================================================================
 
 
+
+
+
+
+
+
+
 #=================================================OCENA PRZEDMECZOWA=======================================================================================
+
+
+
+
+
+
+
+
 
 
 
@@ -159,6 +185,10 @@ todate_pts_viz <- function(season, date){
   
   sample_dt <- Season_Table(season, data = dt[Date <= date])
   
+  order_vector <- order(sample_dt[, Pts], decreasing = TRUE)
+  
+  sample_dt <- sample_dt[order_vector]
+  
   level_order <- sample_dt[, Team]
   
   mean_pts <- sample_dt[, mean(Pts)]
@@ -179,3 +209,39 @@ todate_pts_viz <- function(season, date){
 
 #przykładowe wywołanie: todate_pts_viz("2017/2018", "2018-01-01")
 #=====================================================================================================================
+
+
+
+
+#Bar plot ostatnich wyników meczy=========================================================================================================================================================
+result_barplot <- function(team, num_of_games){
+  
+
+  last_games <- head(Last_Games_Results(team_1 = team), num_of_games)
+  
+  
+  for(i in 1:num_of_games){
+    
+    
+    if(last_games[i, Winner != t1 & Winner != "Draw"])
+      last_games[i, Winner := "Lose"]
+    if(last_games[i, Winner == t1])
+      last_games[i, Winner := "Win"]
+    
+  }
+  
+  
+  
+  ggplot(last_games) +
+    geom_bar(aes(x = Winner), color = "darkblue", fill = "darkblue") +
+    theme_bw() +
+    labs(x = "Result", y = "Count")
+
+}
+
+result_barplot("Liverpool", 10)
+#przykładowe wywołanie: result_barplot("Liverpool", 10)
+#=====================================================================================================================
+
+
+
