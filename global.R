@@ -4,9 +4,8 @@ library(ggplot2)
 
 
 
-dt <- fread(input = "D:/Studia/PiADwR/PiADwRProject/Joined_Data_mod.csv")
+dt <- fread(input = "D:/Studia/PiADwR/PiADwRProject/Datasets/Joined_Data_mod.csv")
 dt <- dt[, -1]
-
 
 
 t1 <- "Liverpool"

@@ -225,11 +225,12 @@ result_barplot <- function(team, num_of_games){
   ggplot(last_games) +
     geom_bar(aes(x = Winner), color = "darkblue", fill = "darkblue") +
     theme_bw() +
-    labs(x = "Result", y = "Count")
+    labs(title = paste("Last", num_of_games, team, "match results"), x = "Result", y = "Count") +
+    theme(plot.title = element_text(hjust = 0.5))
 
 }
 
-result_barplot("Liverpool", 10)
+
 #przykładowe wywołanie: result_barplot("Liverpool", 10)
 #==================================================================================================================
 
@@ -251,7 +252,7 @@ teams_result_barplot <- function(team_1, team_2, num_of_games = 4){
     geom_bar(aes(x = Winner, fill = Winner)) +
     theme_bw() +
     theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-    labs(title = paste("Results count in last ", num_of_games, "games"), x = "Result", y = "Count")
+    labs(title = paste("Results count in last ", num_of_games, "games", "between", team_1, "and", team_2), x = "Result", y = "Count")
   
 }
 
