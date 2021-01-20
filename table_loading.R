@@ -9,7 +9,7 @@ library(ggplot2)
 #Tworzenie Tabeli 1
 #====================================================================================================
 #Ładowanie plików
-seasons_files <- list.files("D:/Studia/PiADwR/ProjekTGłówny/Sezony", full.names = TRUE)
+seasons_files <- list.files("D:/Studia/PiADwR/PiADwRProject/Datasets/Sezony", full.names = TRUE)
 s_dfs <- lapply(seasons_files, fread)
 #Dodanie sezonóW
 for( i in 1:10){
