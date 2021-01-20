@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1611177656129.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1791328307",
+    "id" : "29C41978",
+    "lastKnownWriteTime" : 1611177908,
+    "last_content_update" : 1611177908959,
+    "path" : "D:/Studia/PiADwR/PiADwRProject/global.R",
+    "project_path" : "global.R",
+    "properties" : {
+        "cursorPosition" : "10,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

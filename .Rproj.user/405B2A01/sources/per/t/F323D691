@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1611177664069.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2393590741",
+    "id" : "F323D691",
+    "lastKnownWriteTime" : 1611177416,
+    "last_content_update" : 1611177416,
+    "path" : "D:/Studia/PiADwR/PiADwRProject/Funkcje/functions_visualisation.R",
+    "project_path" : "Funkcje/functions_visualisation.R",
+    "properties" : {
+        "cursorPosition" : "14,58",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
