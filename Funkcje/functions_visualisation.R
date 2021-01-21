@@ -7,25 +7,25 @@ library(ggplot2)
 
 
 #Funckja przedstawia punkty drużyn pod koniec sezonu===============================================================
-season_pts_viz <- function(season){
+season_pts_viz <- function(season, stat){
   
   
   sample_dt <- Season_Table(season)
   
-  order_vector <- order(sample_dt[, Pts], decreasing = TRUE)
+  order_vector <- order(stat, decreasing = TRUE)
   
   sample_dt <- sample_dt[order_vector]
   
-  
+  stat <- stat[order_vector]
   
   level_order <- sample_dt[, Team]
   
-  mean_pts <- sample_dt[, mean(Pts)]
+  #mean_pts <- sample_dt[, mean(Pts)]
   
-   ggplot(sample_dt, aes(x = Pts, y = factor(Team, levels = rev(level_order)))) +
+   ggplot(sample_dt, aes(x = stat, y = factor(Team, levels = rev(level_order)))) +
     geom_point(size = 6, color = "darkblue") +
     geom_segment(aes(xend = 0, yend = Team), size = 3, color = "darkblue") +
-    geom_text(aes(label = Pts), color = "white", size = 3) +
+    geom_text(aes(label = stat), color = "white", size = 3) +
     #geom_vline(xintercept = mean_pts, color = "grey40", linetype = 3, alpha = 0.5) +
     theme_classic() +
     theme(axis.line.y = element_blank(),
@@ -37,6 +37,9 @@ season_pts_viz <- function(season){
 }
 #przykładowe wywołanie: season_pts_viz("2017/2018", Season_Table(s)[, Pts])
 #=======================================================================================================================
+
+season_pts_viz(s, Season_Table(s)[, W])
+
 
 #Forma druzyny w sezonie-wykres=========================================================================================
 plot_season_team_form <- function(season, team, data = dt){
@@ -170,23 +173,29 @@ plot_todate_team_form <- function(season, team, data = dt, date){
 
 
 #Funckja przedstawia punkty drużyn do konkretnej daty================================================================
-todate_pts_viz <- function(season, date){
+todate_pts_viz <- function(season, date, stat){
   
   
   sample_dt <- Season_Table(season, data = dt[Date <= date])
   
-  order_vector <- order(sample_dt[, Pts], decreasing = TRUE)
+  order_vector <- order(stat, decreasing = TRUE)
   
   sample_dt <- sample_dt[order_vector]
   
+  stat <- stat[order_vector]
+  
   level_order <- sample_dt[, Team]
   
-  mean_pts <- sample_dt[, mean(Pts)]
   
-  ggplot(sample_dt, aes(x = Pts, y = factor(Team, levels = rev(level_order)))) +
+  
+  
+  #mean_pts <- sample_dt[, mean(Pts)]
+  
+  
+  ggplot(sample_dt, aes(x = stat, y = factor(Team, levels = rev(level_order)))) +
     geom_point(size = 6, color = "darkblue") +
     geom_segment(aes(xend = 0, yend = Team), size = 3, color = "darkblue") +
-    geom_text(aes(label = Pts), color = "white", size = 3) +
+    geom_text(aes(label = stat), color = "white", size = 3) +
     #geom_vline(xintercept = mean_pts, color = "grey40", linetype = 3, alpha = 0.5) +
     theme_classic() +
     theme(axis.line.y = element_blank(),
@@ -197,9 +206,8 @@ todate_pts_viz <- function(season, date){
   
 }
 
-#przykładowe wywołanie: todate_pts_viz("2017/2018", "2018-01-01")
+#przykładowe wywołanie: todate_pts_viz(s, "2012-01-01", Season_Table(s, dt[Date <= "2012-01-01"])[, GS])
 #===================================================================================================================
-
 
 
 
