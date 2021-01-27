@@ -1,0 +1,132 @@
+---
+title: "Shiny: UI"
+author: 
+- Stanisław Banaszek
+- Mateusz Drobina
+- Dominik Mika
+- Adrian Płoszczyca
+- Jakub Sobkowiak
+date: ''
+output:
+pdf_document: default
+html_document: default
+word_document: default
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(shinyWidgets)
+library(shinydashboard)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tworzenie UI
+Do podstawowego budowania interfejsu w shiny będziemy korzystać z funkcji `fluidPage`, w której tworzymy nasz cały UI.
+
+```{r}
+ui <- fluidPage(
+ #coś
+)
+```
+
+## Inputy i outputy
+Czymś co widzi użytkownik i co zawieramy w `fluidPage` są inputy i outputy. Poniżej mamy przykłady podstawowych inputów i outputów. W prosty sposób możemy również dodać tytuł strony, przy pomocy `titlePanel`
+
+
+```{r}
+ui <- fluidPage(
+  #Umieszczamy tytuł
+  titlePanel("Tytuł"),
+  #Okienko do wpisywania tekstu
+  textInput("nazwa_inputu", "Tekst wyświetlany w aplikacji"),
+  
+  #Mozliwośc wybrania z listy
+  selectInput("nazwa_inputu2", "Tekst wyświetlany w aplikacji", choices = c("Wybór1", "Wybór2")),
+  
+  #Suwak do wyboru wartości
+  sliderInput("nazwa_inputu2", "Tekst wyświetlany w aplikacji",
+              #Wartość domyślna
+              value = 1,
+              #minimum
+              min = 0,
+              #maksimum
+              max = 10),
+  
+  #Wyświetal tekst, który stworzyliśmy w serwerze pod daną nazwą
+  textOutput("nazwa_outputu"),
+  
+  #Interaktywna ramka danych z użyciem data.table
+  DT::DTOutput("nazwa_outputu2"),
+  
+  #Wykres stworzony w serwerze
+  plotOutput("nazwa_outputu3")
+)
+#PAMIĘTAJMY O PRZECINKU PO KAŻDEJ FUNKCJI
+```
+
+
+## Układ strony
+
+Czymś co jest bardzo ważne w UI jest oczywiście wygląd, dlatego chcielibyśmy ułożyć wyświetlane treści zgodnie z naszymi oczekiwaniami.
+
+Przydadzą nam się do tego następujące funkcje: `sidebarLayout`, który umieszcza treści z boku strony, `sidebarPanel`, który możemy umieścic w poprzedniej funkcji, aby stworzyć "kafelek", w którym będzie np. kilka inputów.
+
+
+W funkcji `mainPanel` umieszczamy treści, które chcemy aby znalazły się w panelu głównym. Dodatkowo możemy stworzyć zakładki, przy pomocy `tabsetPanel`, w którego ciele umieszczamy  `tabPanel`, czyli zakładkę, w której wpisujemy to co chcemy np. outpu-wykres.
+
+## Przykład użycia
+
+```{r}
+ui <- fluidPage( 
+  #Tytuł
+  titlePanel("Tytuł"),
+  
+  #To co będzie z boku
+  sidebarLayout(
+    
+    #kafelek
+    sidebarPanel(
+      selectInput("nazwa_inputu2", "Tekst wyświetlany w aplikacji", choices = c("Wybór1", "Wybór2")),
+       sliderInput("nazwa_inputu2", "Tekst wyświetlany w aplikacji",
+              #Wartość domyślna
+              value = 1,
+              #minimum
+              min = 0,
+              #maksimum
+              max = 10) 
+    ),
+  
+  #Główny panel
+  mainPanel( 
+    
+    #Tworzymy zakładki
+    tabsetPanel( 
+      
+      #Pierwsza zakładka-wykres
+      tabPanel("Plot", plotOutput('plot')),
+      
+      #Druga zakładka-ramka danych
+      tabPanel("Table", DT::DTOutput('table'))
+      )
+    )
+  )
+)
+```
+
+
+
+Dodatkowo przydatną rzeczą jest `actionButton`, który pozwala na wykonanie jakiejś czynności po jego kliknięciu. Wyjątkowo przydatne do programowania reaktywnego z funkcją `observeEvent`.
+
+
+
+## Wygląd aplikacji
+
+Ostatecznie chcielibyśmi, aby aplikacja wyglądała bardziej estetycznie. Do tego możemy użyć kilka narzędzi. Po pierwsze możemy zmienić temat naszej aplikacji.
+
+Z pomocą przychodzi nam funkcja `shinythemes::themeSelector()`, którą musimy umieścić w naszym UI. Wtedy w naszej aplikacji pojawia się ikonka z możliwością wyboru tematu.
+
+
+Gdy już wybierzemy ulubiony temat zamieniamy poprzednią funkcję w UI na `theme = shinythemes::shinytheme('NASZ_TEMAT')` i gotowe!
+
+Ostatnim już przedstawionym narzędziem, będzie `shinyWidgetsGallery()`. Jest to stworzona aplikacja w bibliotece `shinyWidgets` dzięki, której możemy zobaczyć różnego typu inputy oraz ich kod.
+
