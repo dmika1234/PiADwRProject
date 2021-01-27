@@ -52,7 +52,7 @@ plot_season_team_form <- function(season, team, data = dt){
   
   for(i in 1:matches_count){
     
-    points[i] <-  Season_Table(season = s, data = sample_dts[Date <= dates[i]])[Team == team, Pts]
+    points[i] <-  Season_Table(season, data = sample_dts[Date <= dates[i]])[Team == team, Pts]
     
     if(i == 1){
       form <- points[i]
