@@ -217,9 +217,9 @@ result_barplot <- function(team, num_of_games){
   for(i in 1:num_of_games){
     
     
-    if(last_games[i, Winner != t1 & Winner != "Draw"])
+    if(last_games[i, Winner != team & Winner != "Draw"])
       last_games[i, Winner := "Lose"]
-    if(last_games[i, Winner == t1])
+    if(last_games[i, Winner == team])
       last_games[i, Winner := "Win"]
     
   }
