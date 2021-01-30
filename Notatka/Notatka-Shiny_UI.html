@@ -386,95 +386,176 @@ summary {
 </div>
 
 
+<div id="wstęp" class="section level2">
+<h2>Wstęp</h2>
+<p>Shiny jest pakietem R pozwalającym na tworzenie interaktywnych aplikacji webowych w łatwy i przystępny sposób. Aplikacja w shiny zbudowana jest z dwóch następujcych elementów:</p>
+<ul>
+<li><p>ui - user interface, czyli obiekt, w którym zawarty jest wygląd aplikacji,</p></li>
+<li><p>server - funkcja organizująca działanie aplikacji.</p></li>
+</ul>
+<p>Do uruchomienia aplikacji służy funkcja <code>shinyApp(ui, server)</code>. Stworzenie dobrej i czytelnej aplikacji może znacznie ułatwić analizowanie danych.</p>
+<p>W tej notatce zajmiemy się omówieniem elementów oraz podstawowych schematów budowy UI.</p>
+</div>
 <div id="tworzenie-ui" class="section level2">
 <h2>Tworzenie UI</h2>
-<p>Do podstawowego budowania interfejsu w shiny będziemy korzystać z funkcji <code>fluidPage</code>, w której tworzymy nasz cały UI.</p>
+<p>Do budowania podstawowego interfejsu w shiny będziemy korzystać z funkcji <code>fluidPage</code>, w której tworzymy cały UI. Wszystkie informacje o rodzajach wprowadznych danych, strukturze wyświetlanych danych oraz szeroko rozumianej estetyce aplikacji będą zawarte wewnątrz tej funkcji.</p>
 <pre class="r"><code>ui &lt;- fluidPage(
- #coś
+ # coś
 )</code></pre>
-</div>
-<div id="inputy-i-outputy" class="section level2">
-<h2>Inputy i outputy</h2>
-<p>Czymś co widzi użytkownik i co zawieramy w <code>fluidPage</code> są inputy i outputy. Poniżej mamy przykłady podstawowych inputów i outputów. W prosty sposób możemy również dodać tytuł strony, przy pomocy <code>titlePanel</code></p>
-<pre class="r"><code>ui &lt;- fluidPage(
-  #Umieszczamy tytuł
-  titlePanel(&quot;Tytuł&quot;),
-  #Okienko do wpisywania tekstu
-  textInput(&quot;nazwa_inputu&quot;, &quot;Tekst wyświetlany w aplikacji&quot;),
-  
-  #Mozliwośc wybrania z listy
-  selectInput(&quot;nazwa_inputu2&quot;, &quot;Tekst wyświetlany w aplikacji&quot;, choices = c(&quot;Wybór1&quot;, &quot;Wybór2&quot;)),
-  
-  #Suwak do wyboru wartości
-  sliderInput(&quot;nazwa_inputu2&quot;, &quot;Tekst wyświetlany w aplikacji&quot;,
-              #Wartość domyślna
-              value = 1,
-              #minimum
-              min = 0,
-              #maksimum
-              max = 10),
-  
-  #Wyświetal tekst, który stworzyliśmy w serwerze pod daną nazwą
-  textOutput(&quot;nazwa_outputu&quot;),
-  
-  #Interaktywna ramka danych z użyciem data.table
-  DT::DTOutput(&quot;nazwa_outputu2&quot;),
-  
-  #Wykres stworzony w serwerze
-  plotOutput(&quot;nazwa_outputu3&quot;)
-)
-#PAMIĘTAJMY O PRZECINKU PO KAŻDEJ FUNKCJI</code></pre>
 </div>
 <div id="układ-strony" class="section level2">
 <h2>Układ strony</h2>
-<p>Czymś co jest bardzo ważne w UI jest oczywiście wygląd, dlatego chcielibyśmy ułożyć wyświetlane treści zgodnie z naszymi oczekiwaniami.</p>
-<p>Przydadzą nam się do tego następujące funkcje: <code>sidebarLayout</code>, który umieszcza treści z boku strony, <code>sidebarPanel</code>, który możemy umieścic w poprzedniej funkcji, aby stworzyć “kafelek”, w którym będzie np. kilka inputów.</p>
-<p>W funkcji <code>mainPanel</code> umieszczamy treści, które chcemy aby znalazły się w panelu głównym. Dodatkowo możemy stworzyć zakładki, przy pomocy <code>tabsetPanel</code>, w którego ciele umieszczamy <code>tabPanel</code>, czyli zakładkę, w której wpisujemy to co chcemy np. outpu-wykres.</p>
+<p>Tym co jest bardzo ważne w UI jest oczywiście wygląd, a dokładniej mówiąc przejrzystość i czytelność, dlatego chcielibyśmy uporządkować wyświetlane elementy tak, aby umożliwić użytkownikowi intuicyjne korzystanie z aplikacji. Pakiet shiny oferuje wiele narzędzi pozwalających na zorganizowanie układu interfejsu zgodnie z naszymi oczekiwaniami.</p>
+<p>Przydadzą nam się do tego następujące funkcje:</p>
+<ul>
+<li><p><code>titlePanel</code> - funkcja tworząca panel tytułowy, w której podajemy tytuł aplikacji,</p></li>
+<li><p><code>sidebarLayout</code> - funkcja organizująca wygląd strony jako mniejszy panel boczny po lewej stronie oraz większy panel po prawej stronie,</p></li>
+<li><p><code>sidebarPanel</code> - funkcja, którą możemy umieścić w poprzedniej funkcji, aby uporządkować panel, w którym będziemy np. wprowadzać dane,</p></li>
+<li><p><code>mainPanel</code> - funkcja, w której umieszczamy treści, które chcemy, aby znalazły się w panelu głównym,</p></li>
+<li><p><code>tabsetPanel</code> - funkcja umożliwiająca organizowanie paska zakładek. Aby utworzyć zakładki w jej ciele używamy funkcji <code>tabPanel</code>, w której umieszczamy dowolne treści, np. wykresy lub tabele.</p></li>
+</ul>
+<p>Oprócz tego możemy bardziej modyfikować wygląd aplikacji dzięki funkcjom <code>fluidRow</code> i <code>column</code> pozwalającym na uporządkowanie obiektów odpowiednio w wierszach oraz kolumnach.</p>
+</div>
+<div id="inputy-i-outputy" class="section level2">
+<h2>Inputy i outputy</h2>
+<p>Układ strony należy oczywiście podporządkować temu jaką funkcję ma pełnić aplikacja, a także temu jaki rodzaj interakcji ma mieć z nią docelowo urzytkownik. Interakcje użytkownika z aplikacją można intuicyjnie podzielić na to co zostaje do aplikacji wprowadzone (input) oraz to co ostatecznie w związku z tym aplikacja zwraca (output). Każdy input i output jest w kodzie identyfikowany dzięki nadanej mu przez nas nazwie. Wewnątrz <code>fluidPage</code> możemy zawrzeć różne rodzaje inputów i outputów w zależności od rodzaju wprowadzanych/wyświetlanych danych.</p>
+<div id="przykładowe-inputy" class="section level4">
+<h4>Przykładowe inputy</h4>
+<ul>
+<li><code>textInput</code> - funkcja tworząca pole, w którym użytkownik może wprowadzić dowolny tekst,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Okienko do wpisywania tekstu
+  textInput(&quot;nazwa_inputu_1&quot;, &quot;Tekst wyświetlany w aplikacji&quot;)
+)</code></pre>
+<ul>
+<li><code>numericInput</code> - funkcja tworząca pole, w którym użytkownik może wprowadzić wartość liczbową,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Okienko do wpisywania liczb
+  numericInput(&quot;nazwa_inputu_2&quot;, &quot;Tekst wyświetlany w aplikacji&quot;,
+              # Wartość domyślna
+              value = 10)
+)</code></pre>
+<ul>
+<li><code>selectInput</code> - funkcja tworząca listę, z której użytkownik może dokonać wyboru - domyślnie parametr <code>multiple</code> umożliwia wybór jednej pozycji z listy,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Możliwość wybrania z listy
+   selectInput(&quot;nazwa_inputu_3&quot;, &quot;Tekst wyświetlany w aplikacji&quot;, 
+               # Lista możliwości do wyboru
+               choices = c(&quot;Wybór_1&quot;, &quot;Wybór_2&quot;))
+)</code></pre>
+<ul>
+<li><code>sliderInput</code> - funkcja tworząca suwak umożliwiający użytkownikowi wybór zakresu interesujących go wartości,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Suwak do wyboru wartości
+  sliderInput(&quot;nazwa_inputu_4&quot;, &quot;Tekst wyświetlany w aplikacji&quot;,
+              # Wartość domyślna
+              value = 1,
+              # Wartość minimalna
+              min = 0,
+              # Wartość maksymalna
+              max = 10)
+)</code></pre>
+<ul>
+<li><code>dateRangeInput</code> - funkcja tworząca pole wyboru zakresu interesujących dat.</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Pole wyboru zakresu dat
+  dateRangeInput(&quot;nazwa_inputu_5&quot;, &quot;Tekst wyświetlany w aplikacji&quot;,
+                 # Data początkowa
+                 start = &quot;2001-01-01&quot;,
+                 # Data końcowa
+                 end   = &quot;2010-12-31&quot;)
+)</code></pre>
+</div>
+<div id="przykładowe-outputy" class="section level4">
+<h4>Przykładowe outputy</h4>
+<p>Używanie funkcji wyświetlających outputy jest bardzo proste, ponieważ w UI decydujemy jedynie gdzie i jak wyswietlić output, który jest obiektem utworzonym wewnątrz funkcji <code>server</code> na podstawie wprowadzonego przez użytkownika inputu.</p>
+<ul>
+<li><code>textOutput</code> - funkcja wyświetlająca tekst,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Wyświetla tekst, który stworzyliśmy w serwerze pod daną nazwą
+  textOutput(&quot;nazwa_outputu_1&quot;)
+)</code></pre>
+<ul>
+<li><code>tableOutput</code> - podstawowa funkcja wyświetlająca tabelę,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Wyświetla tabelę stworzoną w serwerze pod daną nazwą
+  tableOutput(&quot;nazwa_outputu_2&quot;)
+)</code></pre>
+<ul>
+<li><code>DTOutput</code> - funkcja wyświetlająca interaktywną ramkę danych z użyciem pakietu data.table,</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Interaktywna ramka danych z użyciem data.table
+  DT::DTOutput(&quot;nazwa_outputu_3&quot;)
+)</code></pre>
+<ul>
+<li><code>plotOutput</code> - funkcja wyświetlająca wykres.</li>
+</ul>
+<pre class="r"><code>ui &lt;- fluidPage(
+  # Wyświetla wykres stworzony w serwerze
+  plotOutput(&quot;nazwa_outputu_4&quot;,
+             # Szerokość wykresu
+             width = &quot;100%&quot;, 
+             # Wysokość wykresu
+             height = &quot;400px&quot;)
+)</code></pre>
+</div>
 </div>
 <div id="przykład-użycia" class="section level2">
 <h2>Przykład użycia</h2>
+<p>Oczywiście powyższe kody były jedynie fragmentami większej całości. Poniżej możemy zobaczyć przykładowy kod obrazujący strukturę budowy interfejsu. Rzeczą, o której należy pamiętać jest oddzielanie funkcji przecinkami.</p>
 <pre class="r"><code>ui &lt;- fluidPage( 
-  #Tytuł
+  # Tytuł
   titlePanel(&quot;Tytuł&quot;),
   
-  #To co będzie z boku
+  # To co będzie wyświetlone z boku interfejsu
   sidebarLayout(
     
-    #kafelek
+    # Panel boczny
     sidebarPanel(
-      selectInput(&quot;nazwa_inputu2&quot;, &quot;Tekst wyświetlany w aplikacji&quot;, choices = c(&quot;Wybór1&quot;, &quot;Wybór2&quot;)),
-       sliderInput(&quot;nazwa_inputu2&quot;, &quot;Tekst wyświetlany w aplikacji&quot;,
-              #Wartość domyślna
-              value = 1,
-              #minimum
-              min = 0,
-              #maksimum
-              max = 10) 
+      
+      # Pierwszy input - wybór
+      selectInput(&quot;nazwa_inputu_1&quot;, &quot;Tekst wyświetlany w aplikacji&quot;, 
+                  choices = c(&quot;Wybór_1&quot;, &quot;Wybór_2&quot;)),
+      # Drugi input - suwak
+      sliderInput(&quot;nazwa_inputu_2&quot;, &quot;Tekst wyświetlany w aplikacji&quot;,
+                  value = 1, min = 0, max = 10) 
     ),
   
-  #Główny panel
+  # Główny panel
   mainPanel( 
     
-    #Tworzymy zakładki
+    # Tworzymy zakładki
     tabsetPanel( 
       
-      #Pierwsza zakładka-wykres
-      tabPanel(&quot;Plot&quot;, plotOutput(&#39;plot&#39;)),
-      
-      #Druga zakładka-ramka danych
-      tabPanel(&quot;Table&quot;, DT::DTOutput(&#39;table&#39;))
+      # Pierwsza zakładka - wykres
+      tabPanel(&quot;Tytuł wykresu&quot;, plotOutput(&quot;nazwa_outputu_1&quot;)),
+      # Druga zakładka - ramka danych
+      tabPanel(&quot;Tytuł ramki&quot;, DT::DTOutput(&quot;nazwa_outputu_2&quot;))
       )
     )
   )
 )</code></pre>
-<p>Dodatkowo przydatną rzeczą jest <code>actionButton</code>, który pozwala na wykonanie jakiejś czynności po jego kliknięciu. Wyjątkowo przydatne do programowania reaktywnego z funkcją <code>observeEvent</code>.</p>
+<p>Dodatkowo warto zdawać sobie sprawę, że po wprowadzeniu danych przez użytkownika outputy aktualizują się automatycznie, dlatego często przydatne jest programowanie reaktywne z funkcją <code>observeEvent</code> oraz użycie <code>actionButton</code>, który pozwala na wykonanie danego działania dopiero po kliknięciu odpowiedniego przycisku przez użytkownika.</p>
 </div>
 <div id="wygląd-aplikacji" class="section level2">
 <h2>Wygląd aplikacji</h2>
-<p>Ostatecznie chcielibyśmi, aby aplikacja wyglądała bardziej estetycznie. Do tego możemy użyć kilka narzędzi. Po pierwsze możemy zmienić temat naszej aplikacji.</p>
-<p>Z pomocą przychodzi nam funkcja <code>shinythemes::themeSelector()</code>, którą musimy umieścić w naszym UI. Wtedy w naszej aplikacji pojawia się ikonka z możliwością wyboru tematu.</p>
-<p>Gdy już wybierzemy ulubiony temat zamieniamy poprzednią funkcję w UI na <code>theme = shinythemes::shinytheme(&#39;NASZ_TEMAT&#39;)</code> i gotowe!</p>
-<p>Ostatnim już przedstawionym narzędziem, będzie <code>shinyWidgetsGallery()</code>. Jest to stworzona aplikacja w bibliotece <code>shinyWidgets</code> dzięki, której możemy zobaczyć różnego typu inputy oraz ich kod.</p>
+<p>Ostatecznie chcielibyśmy, aby aplikacja wyglądała bardziej estetycznie. Możemy do tego użyć kilku narzędzi. Po pierwsze możemy zmienić motyw naszej aplikacji.</p>
+<p>Z pomocą przychodzi nam funkcja <code>shinythemes::themeSelector()</code>, którą musimy umieścić w naszym UI. Wtedy w naszej aplikacji pojawia się pole z możliwością wyboru motywu.</p>
+<p>Gdy już wybierzemy ulubiony motyw zamieniamy poprzednią funkcję w UI na <code>theme = shinythemes::shinytheme(&#39;NASZ_MOTYW&#39;)</code> i gotowe!</p>
+<p>Poza tym Shiny umożliwia całkowitą customizację wyglądu aplikacji przy użyciu HTML, CSS oraz JavaScript.</p>
+<p>Ostatnim narzędziem, o którym warto pamiętać, jest <code>shinyWidgetsGallery()</code>. Jest to bardzo użyteczna aplikacja stworzona w bibliotece <code>shinyWidgets</code>, dzięki której możemy między innymi zobaczyć w praktyce działanie różnego typu inputów oraz kod umożliwiający użycie ich w aplikacji.</p>
+</div>
+<div id="uwaga" class="section level2">
+<h2>Uwaga</h2>
+<p>W tej notatce omówiliśmy podstawowe elementy pozwalające na zbudowanie interfejsu w shiny ale chcielibyśmy też dodać, że w poszukiwaniu bardziej zaawansowanych rozwiązań warto odwiedzić stronę <a href="https://shiny.rstudio.com/" class="uri">https://shiny.rstudio.com/</a>, gdzie można znaleźć dokumentację pakietu shiny, wiele przykładów oraz nieomówionych tu funkcji.</p>
 </div>
 
 
