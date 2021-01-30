@@ -7,10 +7,10 @@ library(ggplot2)
 
 
 #Funckja przedstawia punkty drużyn pod koniec sezonu===============================================================
-season_pts_viz <- function(season, stat){
+season_stat_viz <- function(season, stat){
   
   
-  sample_dt <- Season_Table(season)
+  sample_dt <- summary_season(season)
   
   order_vector <- order(sample_dt[, get(stat)], decreasing = TRUE)
   
@@ -20,10 +20,10 @@ season_pts_viz <- function(season, stat){
   
   #mean_pts <- sample_dt[, mean(Pts)]
   
-   ggplot(sample_dt, aes(x = get(stat), y = factor(Team, levels = rev(level_order)))) +
-    geom_point(size = 6, color = "darkblue") +
+  ggplot(sample_dt, aes(x = get(stat), y = factor(Team, levels = rev(level_order)))) +
+    geom_point(size = 8, color = "darkblue") +
     geom_segment(aes(xend = 0, yend = Team), size = 3, color = "darkblue") +
-    geom_text(aes(label = get(stat)), color = "white", size = 3) +
+    geom_text(aes(label = round(get(stat), 1)), color = "white", size = 3) +
     #geom_vline(xintercept = mean_pts, color = "grey40", linetype = 3, alpha = 0.5) +
     theme_classic() +
     theme(axis.line.y = element_blank(),
@@ -33,7 +33,7 @@ season_pts_viz <- function(season, stat){
           legend.position = "none")
   
 }
-#przykładowe wywołanie: season_pts_viz("2017/2018", "Pts")
+#przykładowe wywołanie: season_stat_viz("2017/2018", "YC")
 #=======================================================================================================================
 
 
@@ -52,7 +52,7 @@ plot_season_team_form <- function(season, team, data = dt){
   
   for(i in 1:matches_count){
     
-    points[i] <-  Season_Table(season, data = sample_dts[Date <= dates[i]])[Team == team, Pts]
+    points[i] <-  summary_season(season, data = sample_dts[Date <= dates[i]])[Team == team, Pts]
     
     if(i == 1){
       form <- points[i]
@@ -93,7 +93,7 @@ plot_season_team_form <- function(season, team, data = dt){
           legend.position = "none")
   
 }
-#Przykladowe uzycie: plot_season_team_form(s, "Chelsea", dt)
+#Przykladowe uzycie: plot_season_team_form("2016/2017", "Chelsea", dt)
 #=====================================================================================================================
 
 
@@ -121,7 +121,7 @@ plot_todate_team_form <- function(season, team, data = dt, date){
   
   for(i in 1:matches_count){
     
-    points[i] <-  Season_Table(season, data = sample_dts[Date <= dates[i]])[Team == team, Pts]
+    points[i] <-  summary_season(season, data = sample_dts[Date <= dates[i]])[Team == team, Pts]
     
     if(i == 1){
       form <- points[i]
@@ -162,7 +162,7 @@ plot_todate_team_form <- function(season, team, data = dt, date){
           legend.position = "none")
   
 }
-#Przykladowe uzycie: plot_todate_team_form(s, "Chelsea", dt, "2011-11-11")
+#Przykladowe uzycie: plot_todate_team_form("2011/2012", "Chelsea", dt, "2011-11-11")
 #====================================================================================================================
 
 
@@ -174,7 +174,7 @@ plot_todate_team_form <- function(season, team, data = dt, date){
 todate_pts_viz <- function(season, date, stat){
   
   
-  sample_dt <- Season_Table(season, data = dt[Date <= date])
+  sample_dt <- summary_season(season, data = dt[Date <= date])
   
   order_vector <- order(sample_dt[, get(stat)], decreasing = TRUE)
   
@@ -189,9 +189,9 @@ todate_pts_viz <- function(season, date, stat){
   
   
   ggplot(sample_dt, aes(x = get(stat), y = factor(Team, levels = rev(level_order)))) +
-    geom_point(size = 6, color = "darkblue") +
+    geom_point(size = 8, color = "darkblue") +
     geom_segment(aes(xend = 0, yend = Team), size = 3, color = "darkblue") +
-    geom_text(aes(label = get(stat)), color = "white", size = 3) +
+    geom_text(aes(label = round(get(stat), 1)), color = "white", size = 3) +
     #geom_vline(xintercept = mean_pts, color = "grey40", linetype = 3, alpha = 0.5) +
     theme_classic() +
     theme(axis.line.y = element_blank(),
@@ -202,7 +202,7 @@ todate_pts_viz <- function(season, date, stat){
   
 }
 
-#przykładowe wywołanie: todate_pts_viz("2011/2012", "2012-01-01", "Pts")
+#przykładowe wywołanie: todate_pts_viz("2011/2012", "2012-01-01", "fouled")
 #===================================================================================================================
 
 
@@ -210,8 +210,8 @@ todate_pts_viz <- function(season, date, stat){
 #Bar plot ostatnich wyników meczy====================================================================================
 result_barplot <- function(team, num_of_games){
   
-
-  last_games <- head(Last_Games_Results(team_1 = team), num_of_games)
+  
+  last_games <- head(all_games(team_1 = team), num_of_games)
   
   
   for(i in 1:num_of_games){
@@ -231,7 +231,7 @@ result_barplot <- function(team, num_of_games){
     theme_bw() +
     labs(title = paste("Last", num_of_games, team, "match results"), x = "Result", y = "Count") +
     theme(plot.title = element_text(hjust = 0.5))
-
+  
 }
 
 
@@ -250,22 +250,19 @@ result_barplot <- function(team, num_of_games){
 #barplot wyników ostatnich meczy między dwoma drużynami============================================================
 teams_result_barplot <- function(team_1, team_2, num_of_games = 4){
   
-  results <- head(Last_Games_Results(team_1, team_2), num_of_games)
+  results <- head(all_games(team_1, team_2), num_of_games)
   
   ggplot(results) +
     geom_bar(aes(x = Winner, fill = Winner)) +
     theme_bw() +
     theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-    labs(title = paste("Results count in last ", num_of_games, "games", "between", team_1, "and", team_2), x = "Result", y = "Count")
+    labs(title = paste("Results count in last", num_of_games, "games", "between", team_1, "and", team_2), x = "Result", y = "Count")
   
 }
 
 
 #przykładowe wywołanie: teams_result_barplot("Chelsea", "Man United", 10)
+teams_result_barplot("Chelsea", "Chelsea", 10)
 #==================================================================================================================
-
-
-
-
 
 
