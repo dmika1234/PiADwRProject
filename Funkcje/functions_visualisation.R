@@ -242,6 +242,96 @@ result_barplot <- function(team, num_of_games){
 
 
 
+#=========================================================OCENA ARBITRA=============================================
+
+
+#srednie wyniki arbitra dla podanej statystyki======================================================================
+
+
+ref_results <- function(stat){
+  referee_table <-dt[,.(Referee,HomeTeam, AwayTeam, HTR, HF, AF, HY, AY, HR, AR)]
+
+  refs <-unique(referee_table$Referee)
+
+  count_ref <- length(refs)
+
+  redcards = yellowcards = fouls = refsmatches = c()
+
+  for (i  in 1:count_ref){
+    refsmatches[i] = sum(referee_table$Referee == refs[i])
+    fouls[i] = sum(referee_table[Referee == refs[i]]$HF, referee_table[Referee == refs[i]]$AF)/refsmatches[i]
+    yellowcards[i] = sum(referee_table[Referee == refs[i]]$HY, referee_table[Referee == refs[i]]$AY)/refsmatches[i]
+    redcards[i] = sum(referee_table[Referee == refs[i]]$HR, referee_table[Referee == refs[i]]$AR)/refsmatches[i]
+
+  }
+
+  refs_hist <- data.table(refs,refsmatches, fouls, yellowcards, redcards)
+
+  order_refs <- order(refs_hist[, get(stat)], decreasing = TRUE)
+
+  refs_hist1 <- refs_hist[order_refs]
+
+  level_order <- refs_hist1[, refs]
+
+  ggplot(refs_hist1, aes(x = get(stat), y = factor(refs, levels = rev(level_order)))) +
+    geom_segment(aes(xend = 0, yend = refs), size = 4, color = "red") +
+    theme_classic() +
+    labs(title = paste('average per game (', stat,')') , x = "Result", y = "Referees") +
+    theme(axis.line.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.text = element_text(color = "black"),
+          axis.title = element_text(),
+          legend.position = "none")
+}
+
+
+#przykładowe wywołanie: ref_results('fouls')
+#===================================================================================================================
+
+
+
+#wyniki druzyny dla podanego arbitra======================================================================
+
+
+Home_Away_Stats_ref <- function(team, ref){
+  W = D = L = 0
+  for (i in 1:3800){
+    if (referee_table$HomeTeam[i] == team & referee_table$Referee[i] == ref){
+      if (referee_table$HTR[i] == 'H' ){
+        W = W + 1
+      }
+      if (referee_table$HTR[i] == 'D' ){
+        D = D + 1
+      }
+      if (referee_table$HTR[i] == 'A' ){
+        L = L + 1
+      }
+    }
+    else if (referee_table$AwayTeam[i] == team & referee_table$Referee[i] == ref){
+      if (referee_table$HTR[i] == 'A' ){
+        W = W + 1
+      }
+      if (referee_table$HTR[i] == 'D' ){
+        D = D + 1
+      }
+      if (referee_table$HTR[i] == 'H' ){
+        L = L + 1
+      }
+    }
+  }
+  table = c(W, D, L, W + D + L)
+  names(table) = c("Wins","Draws","Loses","Matches")
+  barplot(table, col =c("red", "blue", "green", "yellow"),
+  main = paste("Results for", team, "when", ref, "was the referee"))
+}
+
+
+#przykładowe wywołanie: Home_Away_Stats_ref('Man City', 'H Webb')
+#===================================================================================================================
+
+
+
+
 
 #=======================================================INNE=======================================================
 
@@ -264,5 +354,7 @@ teams_result_barplot <- function(team_1, team_2, num_of_games = 4){
 #przykładowe wywołanie: teams_result_barplot("Chelsea", "Man United", 10)
 teams_result_barplot("Chelsea", "Chelsea", 10)
 #==================================================================================================================
+
+
 
 
