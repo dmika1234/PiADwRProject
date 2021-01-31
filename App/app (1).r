@@ -507,39 +507,60 @@ ui <- fluidPage(
                      )
                  ),
         
-        #### Analiza arbitr?w ####
+        #### Analiza arbitrów ####
         
         tabPanel("Referees",
-                 sidebarLayout(
-                     sidebarPanel(
-                         selectInput("fourth_page_select_statistic", "Statistic:",
-                                     choices = c("Fouls (Avg)" = "fouls",
-                                                 "Yellow Cards (Avg)" = "yellowcards",
-                                                 "Red Cards (Avg)" = "redcards",
-                                                 "Refreed Matches" = "refsmatches"),
-                                     selected = "fouls"),
-                         actionButton("run_referees_comparison", "Confirm"),
-                         selectInput("fourth_page_select_referee", "Referee:",
-                                     choices = referees,
-                                     selected = min(referees)),
-                         selectInput("fourth_page_select_team", "Team:",
-                                     choices = teams,
-                                     selected = min(teams)),
-                         actionButton("run_referee_and_team", "Confirm")
-                         ),
-                     mainPanel(
+                 
+                     
                          tabsetPanel(
                              tabPanel("Statistics",
-                                      plotOutput("referee_stat")),
+                                      
+                                      sidebarLayout(
+                                      sidebarPanel(
+                                        
+                                        selectInput("fourth_page_select_statistic", "Statistic:",
+                                                    choices = c("Fouls (Avg)" = "fouls",
+                                                                "Yellow Cards (Avg)" = "yellowcards",
+                                                                "Red Cards (Avg)" = "redcards",
+                                                                "Refreed Matches" = "refsmatches"),
+                                                    selected = "fouls"),
+                                        actionButton("run_referees_comparison", "Confirm")
+                                        
+                                      ),
+                                      
+                                      
+                                      mainPanel(
+                                      
+                                      
+                                      plotOutput("referee_stat")))),
+                             
+                             
+                             
+                             
                              tabPanel("Referee-Team",
+                                      
+                                      tabPanel("Statistics",
+                                               
+                                               sidebarLayout(
+                                                 sidebarPanel(
+                                                   selectInput("fourth_page_select_referee", "Referee:",
+                                                               choices = referees,
+                                                               selected = min(referees)),
+                                                   selectInput("fourth_page_select_team", "Team:",
+                                                               choices = teams,
+                                                               selected = min(teams)),
+                                                   actionButton("run_referee_and_team", "Confirm")
+                                                 ),
+                                               
+                                       mainPanel(
                                       fluidRow(
                                           plotOutput("referee_team")),
                                       fluidRow(
                                           dataTableOutput("referee_team_tab")))
-                             )
+                             
                          )
                      )
-                 ),
+                 ))),
         #### info o skrotach ####
         
         tabPanel("Informations",
