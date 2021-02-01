@@ -62,7 +62,7 @@ Oprócz tego możemy bardziej modyfikować wygląd aplikacji dzięki funkcjom `f
 
 ## Inputy i outputy
 
-Układ strony należy oczywiście podporządkować temu jaką funkcję ma pełnić aplikacja, a także temu jaki rodzaj interakcji ma mieć z nią docelowo urzytkownik. Interakcje użytkownika z aplikacją można intuicyjnie podzielić na to co zostaje do aplikacji wprowadzone (input) oraz to co ostatecznie w związku z tym aplikacja zwraca (output). Każdy input i output jest w kodzie identyfikowany dzięki nadanej mu przez nas nazwie. Wewnątrz `fluidPage` możemy zawrzeć różne rodzaje inputów i outputów w zależności od rodzaju wprowadzanych/wyświetlanych danych. 
+Układ strony należy oczywiście podporządkować temu jaką funkcję ma pełnić aplikacja, a także temu jaki rodzaj interakcji ma mieć z nią docelowo użytkownik. Interakcje użytkownika z aplikacją można intuicyjnie podzielić na to co zostaje do aplikacji wprowadzone (input) oraz to co ostatecznie w związku z tym aplikacja zwraca (output). Każdy input i output jest w kodzie identyfikowany dzięki nadanej mu przez nas nazwie. Wewnątrz `fluidPage` możemy zawrzeć różne rodzaje inputów i outputów w zależności od rodzaju wprowadzanych/wyświetlanych danych. 
 
 #### Przykładowe inputy
 
